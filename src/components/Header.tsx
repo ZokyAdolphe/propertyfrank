@@ -93,9 +93,9 @@ export default function Header({ onLanguageChange, currentLanguage }: HeaderProp
                         <Link to="/admin/login" className="btn-secondary text-sm">
                             {t.login}
                         </Link>
-                        <Link to="/admin/properties/new" className="btn-primary text-sm">
+                        <a href="#contact" className="btn-primary text-sm">
                             + {t.addProperty}
-                        </Link>
+                        </a>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -138,7 +138,7 @@ export default function Header({ onLanguageChange, currentLanguage }: HeaderProp
                                 </button>
                             </div>
                             <Link to="/admin/login" className="btn-secondary w-full mt-2 text-center block">{t.login}</Link>
-                            <Link to="/admin/properties/new" className="btn-primary w-full text-center block">+ {t.addProperty}</Link>
+                            <a href="#contact" className="btn-primary w-full text-center block">+ {t.addProperty}</a>
                         </nav>
                     </div>
                 )}
