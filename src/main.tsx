@@ -21,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/admin/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
         <Route path="/admin/properties" element={<AdminLayout><PropertiesList /></AdminLayout>} />
         <Route path="/admin/properties/new" element={<AdminLayout><PropertyForm /></AdminLayout>} />
+        <Route path="/admin/properties/edit/:id" element={<AdminLayout><PropertyForm /></AdminLayout>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

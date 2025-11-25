@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
     onLanguageChange: (lang: 'fr' | 'en') => void;
@@ -89,12 +90,12 @@ export default function Header({ onLanguageChange, currentLanguage }: HeaderProp
                             </button>
                         </div>
 
-                        <button className="btn-secondary text-sm">
+                        <Link to="/admin/login" className="btn-secondary text-sm">
                             {t.login}
-                        </button>
-                        <button className="btn-primary text-sm">
+                        </Link>
+                        <Link to="/admin/properties/new" className="btn-primary text-sm">
                             + {t.addProperty}
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -136,8 +137,8 @@ export default function Header({ onLanguageChange, currentLanguage }: HeaderProp
                                     EN
                                 </button>
                             </div>
-                            <button className="btn-secondary w-full mt-2">{t.login}</button>
-                            <button className="btn-primary w-full">+ {t.addProperty}</button>
+                            <Link to="/admin/login" className="btn-secondary w-full mt-2 text-center block">{t.login}</Link>
+                            <Link to="/admin/properties/new" className="btn-primary w-full text-center block">+ {t.addProperty}</Link>
                         </nav>
                     </div>
                 )}
