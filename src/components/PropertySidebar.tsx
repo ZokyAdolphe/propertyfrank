@@ -203,7 +203,7 @@ export default function PropertySidebar({ language, onFilterChange }: PropertySi
                                     name="location"
                                     value="all"
                                     defaultChecked
-                                    onChange={(e) => onFilterChange({ city: 'all' })}
+                                    onChange={() => onFilterChange({ city: 'all' })}
                                     className="w-4 h-4 text-blue-600"
                                 />
                                 <span className="text-slate-600 group-hover:text-blue-600 transition-colors">{t.all}</span>
@@ -241,7 +241,7 @@ export default function PropertySidebar({ language, onFilterChange }: PropertySi
                                     name="price"
                                     value="all"
                                     defaultChecked
-                                    onChange={(e) => onFilterChange({ priceRange: 'all' })}
+                                    onChange={() => onFilterChange({ priceRange: 'all' })}
                                     className="w-4 h-4 text-blue-600"
                                 />
                                 <span className="text-slate-600 group-hover:text-blue-600 transition-colors">{t.all}</span>
