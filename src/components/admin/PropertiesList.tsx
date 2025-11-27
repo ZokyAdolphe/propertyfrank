@@ -37,11 +37,11 @@ export default function PropertiesList() {
 
     return (
         <div>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div className="flex items-center justify-between mb-8">
                 <h1 className="text-3xl font-bold" style={{ color: '#0f172a' }}>
                     Propriétés ({properties.length})
                 </h1>
-                <Link to="/admin/properties/new" className="btn-primary text-center">
+                <Link to="/admin/properties/new" className="btn-primary">
                     + Nouvelle propriété
                 </Link>
             </div>

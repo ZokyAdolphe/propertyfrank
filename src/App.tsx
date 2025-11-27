@@ -3,7 +3,6 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import PropertyCard from './components/PropertyCard';
 import PropertyModal from './components/PropertyModal';
-import PropertySidebar from './components/PropertySidebar';
 import Footer from './components/Footer';
 import { useProperties } from './hooks/useProperties';
 import type { Property, PropertyType, SearchFilters } from './types';
@@ -96,37 +95,45 @@ function App() {
 
   const t = translations[language];
 
-  const handleSearch = (filters: any) => {
+  const handleSearch = (filters: SearchFilters) => {
     let filtered = properties;
 
-    if (filters.type && filters.type !== 'all') {
+    if (filters.type) {
       filtered = filtered.filter((p: Property) => p.type === filters.type);
     }
 
-    if (filters.city && filters.city !== 'all') {
-      filtered = filtered.filter((p: Property) => p.location.city === filters.city);
+    if (filters.location) {
+      filtered = filtered.filter((p: Property) =>
+        p.location.city.toLowerCase().includes(filters.location!.toLowerCase()) ||
+        p.location.region.toLowerCase().includes(filters.location!.toLowerCase()) ||
+        p.location.address.toLowerCase().includes(filters.location!.toLowerCase())
+      );
     }
 
-    if (filters.priceRange && filters.priceRange !== 'all') {
-      const [min, max] = filters.priceRange.split('-').map(Number);
-      if (max) {
-        filtered = filtered.filter((p: Property) => p.price >= min && p.price <= max);
-      } else {
-        filtered = filtered.filter((p: Property) => p.price >= min);
-      }
+    if (filters.minPrice) {
+      filtered = filtered.filter((p: Property) => p.price >= filters.minPrice!);
     }
 
-    if (filters.hasPool) {
-      filtered = filtered.filter((p: Property) => p.features.pool);
-    }
-    if (filters.hasBeachfront) {
-      filtered = filtered.filter((p: Property) => p.features.beachfront);
-    }
-    if (filters.isFurnished) {
-      filtered = filtered.filter((p: Property) => p.features.furnished);
+    if (filters.maxPrice) {
+      filtered = filtered.filter((p: Property) => p.price <= filters.maxPrice!);
     }
 
     setFilteredProperties(filtered);
+
+    // Scroll to properties section
+    const element = document.getElementById('properties');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleFilterChange = (type: PropertyType | 'all') => {
+    setActiveFilter(type);
+    if (type === 'all') {
+      setFilteredProperties(properties);
+    } else {
+      setFilteredProperties(properties.filter((p: Property) => p.type === type));
+    }
   };
 
   const handlePropertyClick = (property: Property) => {
@@ -184,47 +191,83 @@ function App() {
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4" style={{ color: '#0f172a' }}>
             {t.featuredProperties}
           </h2>
+
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mt-8">
+            <button
+              onClick={() => handleFilterChange('all')}
+              className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
+              style={activeFilter === 'all'
+                ? { background: 'linear-gradient(to right, #0284c7, #0891b2)', color: 'white' }
+                : { background: 'white', color: '#334155', border: '1px solid #e2e8f0' }
+              }
+            >
+              {t.all}
+            </button>
+            <button
+              onClick={() => handleFilterChange('villa')}
+              className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
+              style={activeFilter === 'villa'
+                ? { background: 'linear-gradient(to right, #0284c7, #0891b2)', color: 'white' }
+                : { background: 'white', color: '#334155', border: '1px solid #e2e8f0' }
+              }
+            >
+              {t.villa}
+            </button>
+            <button
+              onClick={() => handleFilterChange('house')}
+              className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
+              style={activeFilter === 'house'
+                ? { background: 'linear-gradient(to right, #0284c7, #0891b2)', color: 'white' }
+                : { background: 'white', color: '#334155', border: '1px solid #e2e8f0' }
+              }
+            >
+              {t.house}
+            </button>
+            <button
+              onClick={() => handleFilterChange('apartment')}
+              className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
+              style={activeFilter === 'apartment'
+                ? { background: 'linear-gradient(to right, #0284c7, #0891b2)', color: 'white' }
+                : { background: 'white', color: '#334155', border: '1px solid #e2e8f0' }
+              }
+            >
+              {t.apartment}
+            </button>
+            <button
+              onClick={() => handleFilterChange('office')}
+              className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg"
+              style={activeFilter === 'office'
+                ? { background: 'linear-gradient(to right, #0284c7, #0891b2)', color: 'white' }
+                : { background: 'white', color: '#334155', border: '1px solid #e2e8f0' }
+              }
+            >
+              {t.office}
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar - Hidden on mobile by default, or stacked */}
-          <div className="w-full lg:w-1/4">
-            <PropertySidebar
-              language={language}
-              onFilterChange={handleSearch}
-            />
+        {/* Properties Grid */}
+        {filteredProperties.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                language={language}
+                onClick={() => handlePropertyClick(property)}
+              />
+            ))}
           </div>
-
-          {/* Properties Grid */}
-          <div className="w-full lg:w-3/4">
-            {filteredProperties.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-8">
-                {filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                    language={language}
-                    onClick={() => handlePropertyClick(property)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 bg-slate-50 rounded-2xl border border-slate-100">
-                <svg className="w-24 h-24 mx-auto text-slate-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">{t.noResults}</h3>
-                <p className="text-slate-600">{t.noResultsDesc}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="mt-6 btn-secondary"
-                >
-                  {t.all}
-                </button>
-              </div>
-            )}
+        ) : (
+          <div className="text-center py-20">
+            <svg className="w-24 h-24 mx-auto text-slate-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">{t.noResults}</h3>
+            <p className="text-slate-600">{t.noResultsDesc}</p>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Contact Section */}

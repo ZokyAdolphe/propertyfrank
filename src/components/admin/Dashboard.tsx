@@ -18,12 +18,12 @@ export default function Dashboard() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-8" style={{ color: '#0f172a' }}>
+            <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8" style={{ color: '#0f172a' }}>
                 Tableau de bord
             </h1>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                 <div className="card p-6">
                     <div className="flex items-center justify-between">
                         <div>
@@ -88,21 +88,21 @@ export default function Dashboard() {
                 </h2>
                 <div className="space-y-4">
                     {recentProperties.map((property) => (
-                        <div key={property.id} className="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                            <div className="flex items-center space-x-4">
+                        <div key={property.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100 sm:border-none">
+                            <div className="flex items-center space-x-4 mb-3 sm:mb-0">
                                 {property.images[0] && (
                                     <img
                                         src={property.images[0]}
                                         alt={property.title}
-                                        className="w-16 h-16 rounded-lg object-cover"
+                                        className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                                     />
                                 )}
-                                <div>
-                                    <h3 className="font-semibold" style={{ color: '#0f172a' }}>{property.title}</h3>
-                                    <p className="text-sm" style={{ color: '#64748b' }}>{property.location.city}, {property.location.region}</p>
+                                <div className="min-w-0">
+                                    <h3 className="font-semibold truncate pr-4" style={{ color: '#0f172a' }}>{property.title}</h3>
+                                    <p className="text-sm truncate" style={{ color: '#64748b' }}>{property.location.city}, {property.location.region}</p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center justify-between sm:justify-end sm:space-x-4 w-full sm:w-auto">
                                 <span className="font-bold" style={{ color: '#0284c7' }}>
                                     {property.price.toLocaleString()} {property.currency}
                                 </span>
@@ -121,6 +121,9 @@ export default function Dashboard() {
                             </div>
                         </div>
                     ))}
+                    {recentProperties.length === 0 && (
+                        <p className="text-center text-gray-500 py-4">Aucune propriété récente</p>
+                    )}
                 </div>
             </div>
         </div>
